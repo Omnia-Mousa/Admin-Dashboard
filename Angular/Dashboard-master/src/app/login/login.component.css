@@ -1,0 +1,28 @@
+/* @import "../../styles.css"; */
+
+.loginhome {
+    height: 100vh;
+    background-color: #e7e7e7;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+  }
+
+.loginhome .cover {
+    background-color: #009688;
+    height: 50vh;
+  }
+
+  .content .logo {
+    margin-bottom: 40px;
+    font-family: "Niconne";
+    color: #fff;
+  }
+  
+  .content .logo h1 {
+    font-size: 52px;
+    font-weight: 400;
+  }

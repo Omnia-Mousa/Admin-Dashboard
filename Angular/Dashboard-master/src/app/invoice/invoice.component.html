@@ -1,0 +1,69 @@
+    <!-- Sidebar menu-->
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <!-- main content of invoices -->
+    <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-file-text-o"></i> Invoice</h1>
+          <p>A Printable Invoice Format</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item"><a routerLink="/order">Orders</a></li>
+        </ul>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <section class="invoice"   id="printdiv">
+              <div class="row mb-4">
+                <div class="col-6">
+                  <h2 class="page-header"><i class="fa fa-globe"></i> Dukan Invoice</h2>
+                </div>
+                <div class="col-6">
+                  <h5 class="text-right">{{today | date:'MMM d, y'}}</h5>
+                </div>
+              </div>
+              <div class="row invoice-info">
+                <div class="col-4">From
+                  <address><strong>StoreName:</strong>{{myproduct.user.shopName}}<br><strong>Address:</strong>{{order.sourceAddress}}<br><strong>Phone:</strong>{{myproduct.user.phone}}<br><strong>Email:</strong> {{myproduct.user.email}}</address>
+                </div>
+                <div class="col-4">To
+                  <address><strong>Client:</strong>{{client.fName}} {{client.lName}}<br><strong>Address:</strong>{{order.destinationAddress}}<br><strong>Phone:</strong>{{client.phone}}<br><strong>Email:</strong> {{client.email}}</address>
+                </div>
+                <div class="col-4"><b>OrderID #{{orderID}}</b><br></div>
+              </div>
+              <div class="row">
+                <div class="col-12 table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Serial #</th>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Description</th>
+                        <th>Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let product of produtcs">
+                        <td>{{product.id}}</td>
+                        <td>{{product.title}}</td>
+                        <td>{{amount[0]}}</td>
+                        <td>{{product.description}}</td>
+                        <td>{{product.price|currency:"EGP"}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+                <div class="row d-print-none mt-2">
+                  <div class="col-12 text-right"><button class="btn btn-info" printSectionId="printdiv" ngxPrint><i class="fa fa-print"></i> Print</button></div>
+                  
+                </div>
+          </div>
+        </div>
+      </div>
+    </main>
+   

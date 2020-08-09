@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Bootstrap CRUD Data Table for Database with Modal Form</title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			// Activate tooltip
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+
+	</script>
+</head>
+
+<body>
+
+	<main class="app-content">
+		<div class="app-title" style="color: black;">
+			<div>
+				<h1><i class="fa fa-dashboard"></i> Products</h1>
+				<p>Dukan Admin Dashboard</p>
+			</div>
+			<ul class="app-breadcrumb breadcrumb">
+				<li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+				<li class="breadcrumb-item"><a routerLink="/dashboard">Dashboard</a></li>
+			</ul>
+		</div>
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-6">
+						<h2>Manage <b>Products</b></h2>
+					</div>
+					<div class="col-sm-6">
+						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i
+								class="material-icons">&#xE147;</i> <span>Add New Product</span></a>
+					</div>
+				</div>
+			</div>
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Description</th>
+						<th>Price</th>
+						<th>Status</th>
+						<th>Amount</th>
+						<th>Actions</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let product of products">
+						<td>{{product.title}}</td>
+						<td>{{product.description}}</td>
+						<td>{{product.price|currency:"EGP"}}</td>
+						<td>
+							<input type="checkbox" (click)="editStatus(product)" [checked]="product.status == 'active'" class="form-check-input" id="exampleCheck1" checked>
+							<!-- <input type="checkbox" [checked]="product.status == 'active'" (change)="onChange(product, $event.target.checked)"  class="form-check-input" id="exampleCheck1"> -->
+    						<label class="form-check-label" for="exampleCheck1">{{product.status}}</label>			
+						</td>
+						<td>{{product.amount}}</td>
+						<td>
+							<a href="#productDetailsModal" (click)="getProductById(product)" class="view" title="View"
+								data-toggle="modal"><i class="material-icons">&#xE417;</i></a>
+							<a href="#editEmployeeModal" (click)="getProductById(product)" class="edit"
+								data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+									title="Edit">&#xE254;</i></a>
+							<a href="#deleteEmployeeModal" (click)="getProductById(product)" class="delete"
+								data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+									title="Delete">&#xE872;</i></a>
+						</td>
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</main>
+	<div id="modal">
+		<div id="addEmployeeModal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form #productForm="ngForm" (ngSubmit)="onSubmitProduct(productForm.value)">
+						<div class="modal-header">
+							<h4 class="modal-title">Add Product</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label>Title</label>
+								<input type="text" class="form-control" name="title" ngModel required>
+							</div>
+							<div class="form-group">
+								<label>Description</label>
+								<textarea class="form-control" name="description" ngModel required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Status</label>
+								<input type="text" class="form-control" name="status" ngModel required>
+							</div>
+							<div class="form-group">
+								<label>ImageUrl</label>
+								<input type="text" class="form-control" name="imageUrl" ngModel required>
+							</div>
+							<div class="form-group">
+								<label>price</label>
+								<input type="text" class="form-control" name="price" ngModel required>
+							</div>
+							<div class="form-group">
+								<label>category</label>
+								<input type="text" class="form-control" name="category" ngModel required>
+							</div>
+							<div class="form-group">
+								<label>Amount</label>
+								<input type="text" class="form-control" name="amount" ngModel required>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+							<button type="submit" onclick="$('.modal').modal('hide')"
+								class="btn btn-success">Add</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="modal">
+		<div id="deleteEmployeeModal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form>
+						<div class="modal-header">
+							<h4 class="modal-title">Delete Product</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+							<p>Are you sure you want to delete this Product?</p>
+							<p class="text-warning"><small>This action cannot be undone.</small></p>
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+							<button type="submit" onclick="$('.modal').modal('hide')" (click)="deleteProduct(myproduct)"
+								class="btn btn-danger">Delete</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Edit Modal HTML -->
+	<div id="modal">
+		<div id="editEmployeeModal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form #editProductForm="ngForm" (ngSubmit)="onSubmitEdit()">
+						<div class="modal-header">
+							<h4 class="modal-title">Edit Product</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+							<!-- <div class="form-group">
+							
+							<input type="hidden" class="form-control" name="id" ngModel value={{myproduct.id}}
+								required>
+						</div> -->
+							<div class="form-group">
+								<input type="hidden" class="form-control" id="id" name="id" ngModel>
+							</div>
+							<div class="form-group">
+								<label>Title</label>
+								<input type="text" class="form-control" id="title" name="title" ngModel>
+							</div>
+							<div class="form-group">
+								<label>Description</label>
+								<textarea class="form-control" id="description" name="description" ngModel></textarea>
+							</div>
+							<!-- <div class="form-group">
+								<label>status</label>
+								<input type="text" class="form-control" id="status" name="status" ngModel>
+							</div> -->
+							<div class="form-group">
+								<label>ImageUrl</label>
+								<input type="text" class="form-control" id="imageUrl" name="imageUrl" ngModel>
+							</div>
+							<div class="form-group">
+								<label>price</label>
+								<input type="text" class="form-control" id="price" name="price" ngModel>
+							</div>
+							<div class="form-group">
+								<label>category</label>
+								<input type="text" class="form-control" id="category" name="category" ngModel>
+							</div>
+							<div class="form-group">
+								<label>Amount</label>
+								<input type="text" class="form-control" id="amount" name="amount" ngModel>
+							</div>
+							<div class="form-group">
+								<label>Rate</label>
+								<input type="text" class="form-control" id="rate" name="rate" ngModel>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+							<button type="submit" class="btn btn-info" onclick="$('.modal').modal('hide')">Save</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="modal">
+		<div id="productDetailsModal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<!-- <section class="centered">
+						<h1>{{myproduct.title}}</h1>
+						<hr>
+						<div class="imgdetails">
+							<img [src]="myproduct.imageUrl" [alt]="myproduct.title">
+						</div>
+						<h2><span>Price: </span>{{myproduct.price}} EGP</h2>
+						<h2><span>Description: </span>{{myproduct.description}}</h2>
+						<h2><span>Amount: </span>{{myproduct.amount}}</h2>
+						<h2><span>Rate: </span>{{myproduct.rate}}</h2>
+						<h2><span>By: </span>{{myproduct.user.fName}} {{myproduct.user.lName}}</h2>
+						
+					</section> -->
+					<section class="product">
+						<div class="product__photo">
+							<div class="photo-container">
+								<div class="photo-main">
+										<img [src]="myproduct.imageUrl" alt="myproduct.title">
+								</div>
+							</div>
+						</div>
+						<div class="product__info">
+							<div class="title">
+								<h1>{{myproduct.title}}</h1>
+								<span>ID: {{myproduct.id}}</span>
+							</div>
+							<div class="price">
+								EGP <span>{{myproduct.price}}</span>
+							</div>
+							<div class="description">
+								<h2>Details</h2>
+								<ul>
+									<li>Status: {{myproduct.status}}</li>
+									<li>Amount: {{myproduct.amount}}</li>
+									<li>Rate: 
+										<!-- *ngFor="let rate of myproduct.rate; let i = index" -->
+										<span *ngFor="let r of '3'.repeat(3).split('')" style="margin-left: 7px ;" class="fa fa-star checked"></span>
+										<!-- <span style="margin-left: 7px ;" class="fa fa-star checked"></span>
+										<span style="margin-left: 7px ;" class="fa fa-star checked"></span> -->
+									</li>
+								</ul>
+							</div>
+							<div class="description">
+								<h2>Description:</h2>
+								<p>{{myproduct.description}}</p>
+							</div>
+							<!-- <button class="buy--btn">ADD TO CART</button> -->
+						</div>
+					</section>
+					
+					<footer>
+						<div>
+							<h2>Store Name: {{myproduct.user.shopName}}</h2> -->
+							<span>Owner: {{myproduct.user.fName}} {{myproduct.user.lName}}</span> 
+							<!-- <p>Design by <a href="https://dribbble.com/shots/5216438-Daily-UI-012">dribbble shot</a> of <a href="https://dribbble.com/rodrigorramos">Rodrigo Ramos</a></p> -->
+						</div>
+					</footer>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Bootstrap CRUD Data Table for Database with Modal Form</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    
+        <!-- <script type="text/javascript">
+            $(document).ready(function () {
+                
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+    
+        </script> -->
+    </head>
+
+<body>
+    <main class="app-content">
+        <div class="app-title" style="color: black;">
+            <div>
+              <h1><i class="fa fa-dashboard"></i> Customers</h1>
+              <p>Dukan Admin Dashboard</p>
+            </div>
+            <ul class="app-breadcrumb breadcrumb">
+              <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+              <li class="breadcrumb-item"><a routerLink="/dashboard">Dashboard</a></li>
+            </ul>
+          </div>
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h2>Customers <b>Management</b></h2>
+                    </div>
+                    <div class="col-sm-7">
+                        <!-- <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i
+                            class="material-icons">&#xE147;</i> <span>Add New Customer</span></a> -->
+                        <a (click)="exportTable()" class="btn btn-info"><i class="material-icons">&#xE24D;</i>
+                            <span>Export to Excel</span></a>
+                    </div>
+                </div>
+            </div>
+            <table id="ExampleTable" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>FirstName</th>
+                        <th>LastName</th>
+                        <th>Role</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <!-- <th>Gender</th> -->
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let user of users">
+                    <!-- <tr *ngIf="Type"> -->
+                    <tr *ngIf="user.Type == 'shop' || user.Type == 'user'">
+                        <td>{{user.fName}}</td>
+                        <td>{{user.lName}}</td>
+                        <td>{{user.Type}}</td>
+                        <td>{{user.email}}</td>
+                        <td>
+							<input type="checkbox" (click)="editStatus(user)" [checked]="user.status == 'active'" class="form-check-input" id="exampleCheck1" checked>
+							<!-- <input type="checkbox" [checked]="product.status == 'active'" (change)="onChange(product, $event.target.checked)"  class="form-check-input" id="exampleCheck1"> -->
+    						<label class="form-check-label" for="exampleCheck1">{{user.status}}</label>			
+						</td>
+                        <!-- <td>{{user.gender}}</td> -->
+                        <td>
+                            <!-- <a href="#editEmployeeModal" (click)="getUserById(user)" class="edit"
+                                    data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                                        title="Edit">&#xE254;</i></a> -->
+                            <a href="#deleteEmployeeModal" (click)="getUserById(user)" class="delete" title="Delete" data-toggle="modal"><i
+                                    class="material-icons">&#xE872;</i></a>
+                        </td>
+                    </tr>
+                </ng-container>
+
+                </tbody>
+            </table>
+            
+        </div>
+
+    </main>
+<!-- <div id="modal">
+    <div id="addEmployeeModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <app-add-users></app-add-users>   
+            </div>
+        </div>
+    </div>
+</div> -->
+<div id="modal">
+    <div id="deleteEmployeeModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete User</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this Record?</p>
+                        <p class="text-warning"><small>This action cannot be undone.</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                        <button type="submit" onclick="$('.modal').modal('hide')" (click)="deleteUser(user)" class="btn btn-danger" data-toggle="modal">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="editEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- <form #editProductForm="ngForm" (ngSubmit)="editProduct(editProductForm.value)"> -->
+            <form #editUSerForm="ngForm">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit User</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" class="form-control" name="fName" ngModel value={{user.fName}} required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" name="lName" ngModel [value]="user.lName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" class="form-control" name="email" ngModel [value]="user.email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="text" class="form-control" name="password" ngModel [value]="user.password"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <input type="text" class="form-control" name="status" placeholder="Status" ngModel [value]="user.status">
+                    </div>
+                    <div class="form-group">
+                        <label>gender</label>
+                        <input type="text" class="form-control" name="gender" ngModel [value]="user.gender"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" class="form-control" name="phone" ngModel [value]="user.phone" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <button type="submit" onclick="$('.modal').modal('hide')"
+                            class="btn btn-info">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>
+
+
+

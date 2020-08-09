@@ -1,0 +1,39 @@
+<form [formGroup]="registerForm" #postForm="ngForm" (ngSubmit)="onSubmit()">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Admin</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" formControlName="FName" name="FName" class="form-control" placeholder="Firstname" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" formControlName="LName" name="LName" class="form-control" placeholder="Lastname" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" formControlName="email" name="email" class="form-control" placeholder="Email Address"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" formControlName="password" name="password" class="form-control"  placeholder="Password"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="number" formControlName="phone" name="phone" class="form-control" placeholder="Phone" required>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label>Type</label>
+                            <input type="text" formControlName="type" name="type" class="form-control" placeholder="Type" required>
+                        </div> -->
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                        <button type="submit" (click)="onAddUser(postForm)" onclick="$('.modal').modal('hide')"
+								class="btn btn-success">Add</button>
+                    </div>
+                </form>

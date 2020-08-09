@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Bootstrap Order Details Table with Search Filter</title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<!-- <style type="text/css">
+	
+	</style> -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
+</head>
+
+<body>
+	<main class="app-content">
+		<div class="app-title" style="color: black;">
+            <div>
+              <h1><i class="fa fa-dashboard"></i> Orders</h1>
+              <p>Dukan Admin Dashboard</p>
+            </div>
+            <ul class="app-breadcrumb breadcrumb">
+              <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+              <li class="breadcrumb-item"><a routerLink="/dashboard">Dashboard</a></li>
+            </ul>
+          </div>
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-4">
+						<h2>Order <b>Details</b></h2>
+					</div>
+					<div class="col-sm-8">
+						<a class="btn btn-danger" (click)="downloadPDF()" data-toggle="modal"> <span>Download PDF</span></a>
+						<a class="btn btn-success" (click)="openPDF()" data-toggle="modal"><span>Open PDF</span></a>
+					</div>
+				</div>
+			</div>
+			<div class="table-filter">
+				<div class="row">				
+						<!-- <div class="filter-group">
+							<label>Status</label>
+							<select class="form-control">
+								<option>Any</option>
+								<option>Delivered</option>
+								<option>Shipped</option>
+								<option>Pending</option>
+								<option>Cancelled</option>
+							</select>
+						</div>
+						<span class="filter-icon"><i class="fa fa-filter"></i></span> -->
+				</div>
+			</div>
+
+			<div id="htmlData" #htmlData>
+				<table class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th style="width: 150px;">OrderID</th>
+							<th style="width: 150px;">Source</th>
+							<th style="width: 250px;" >Destination</th>
+							<th style="width: 150px;">Status</th>
+							<th style="width: 150px;">Total Price</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let order of orders">
+							<td>{{order.id}}</td>
+							<td>{{order.sourceAddress}}</td>
+							<td  style="width: 250px;">{{order.destinationAddress}}</td>
+							<td>{{order.status}}</td>
+							<td>{{order.totalPrice|currency:"EGP"}}</td>
+							<td><a [routerLink]="['/invoice', order.id]" (click)="getOrderById(order)" class="view" title="View Details" data-toggle="modal"><i
+										class="material-icons">&#xE5C8;</i></a></td>
+						</tr>
+						
+						<!-- <span class="status text-success">&bull;</span>  -->
+						<!-- <td><a href="#" class="view" title="View Details" data-toggle="tooltip"><i class="material-icons">&#xE5C8;</i></a></td>
+                   
+						<td><a href="#" class="view" title="View Details" data-toggle="tooltip"><i class="material-icons">&#xE5C8;</i></a></td>                        
+                   
+						<td><a href="#" class="view" title="View Details" data-toggle="tooltip"><i class="material-icons">&#xE5C8;</i></a></td>
+                    
+						<td><a href="#" class="view" title="View Details" data-toggle="tooltip"><i class="material-icons">&#xE5C8;</i></a></td>
+                     -->
+					</tbody>
+				</table>
+			</div>
+			<div class="clearfix">
+				<div class="hint-text">Showing <b>{{orders.length}}</b> out of <b>{{orders.length}}</b> entries</div>
+				<!-- <ul class="pagination">
+					<li class="page-item disabled"><a href="#">Previous</a></li>
+					<li class="page-item"><a href="#" class="page-link">1</a></li>
+					<li class="page-item"><a href="#" class="page-link">2</a></li>
+					<li class="page-item"><a href="#" class="page-link">3</a></li>
+					<li class="page-item active"><a href="#" class="page-link">4</a></li>
+					<li class="page-item"><a href="#" class="page-link">5</a></li>
+					<li class="page-item"><a href="#" class="page-link">6</a></li>
+					<li class="page-item"><a href="#" class="page-link">7</a></li>
+					<li class="page-item"><a href="#" class="page-link">Next</a></li>
+				</ul> -->
+			</div>
+		</div>
+
+
+	</main>
+
+	<div id="editEmployeeModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form #editProductForm="ngForm" (ngSubmit)="onSubmitEdit()">
+					<div class="modal-header">
+						<h4 class="modal-title">Edit Order</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="hidden" class="form-control" id="id" name="id" ngModel >
+						</div>
+						<div class="form-group">
+							<label>Status</label>
+							<input type="text" class="form-control" id="title" name="title" ngModel >
+						</div>
+						<!-- <div class="form-group">
+							<label>Description</label>
+							<textarea class="form-control" id="description" name="description" ngModel ></textarea>
+						</div>
+						<div class="form-group">
+							<label>status</label>
+							<input type="text" class="form-control" id="status" name="status" ngModel >
+						</div>
+						<div class="form-group">
+							<label>ImageUrl</label>
+							<input type="text" class="form-control" id="imageUrl" name="imageUrl" ngModel >
+						</div>
+						<div class="form-group">
+							<label>price</label>
+							<input type="text" class="form-control" id="price" name="price" ngModel >
+						</div>
+						<div class="form-group">
+							<label>category</label>
+							<input type="text" class="form-control" id="category" name="category" ngModel >
+						</div>
+						<div class="form-group">
+							<label>Amount</label>
+							<input type="text" class="form-control" id="amount" name="amount" ngModel >
+						</div>
+						<div class="form-group">
+							<label>Rate</label>
+							<input type="text" class="form-control" id="rate" name="rate" ngModel >
+						</div> -->
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<button type="submit" class="btn btn-info" onclick="$('.modal').modal('hide')">Save</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

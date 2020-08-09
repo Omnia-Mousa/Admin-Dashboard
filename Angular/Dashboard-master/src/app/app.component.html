@@ -1,0 +1,15 @@
+<div *ngIf="!LoginSuccessfully">
+	<app-login (sendSuccessLogin)="receiveSignIn($event)"></app-login>
+</div>
+
+
+<div *ngIf="LoginSuccessfully">
+<app-head></app-head>
+<app-header></app-header>
+<app-aside></app-aside>
+
+
+<div class="container">
+	<router-outlet></router-outlet>
+</div>
+</div>
